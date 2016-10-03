@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -23,21 +24,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        //Date date = new Date();
-        //Calendar calendar = new GregorianCalendar();
-        //int mon = calendar.get(Calendar.MONTH);
-
-
         ListView lv = (ListView) findViewById(R.id.listView);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, firstList);
         lv.setAdapter(adapter);
+
+        // Обработчик ListView
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                goMonthView(position);
+            }
+        });
+
     }
 
-
-   /* protected void onListItemClick(ListView l, View v, int position,long id) {
-        super.onListItemClick(l, v, position, id);
-        Intent intent = new Intent(MainActivity.this, MonthActivity.class);
+    // Запуск активити месяца
+    public void goMonthView(int position) {
+        Intent intent = new Intent(this, MonthActivity.class);
         intent.putExtra("monthNumber", position);
         startActivity(intent);
-    }; */
+    }
 }

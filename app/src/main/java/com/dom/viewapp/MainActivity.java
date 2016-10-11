@@ -28,12 +28,15 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, firstList);
         lv.setAdapter(adapter);
 
+
         // Обработчик ListView
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 goMonthView(position);
             }
         });
+
+        lv.setItemChecked(0, true);
 
     }
 

@@ -18,8 +18,9 @@ public class BirthdayActivity extends AppCompatActivity {
     EditText dateEdit, nameEdit;
     Button addButton;
 
-
     DBHelper dbHelper;
+
+    public Integer day, month;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class BirthdayActivity extends AppCompatActivity {
             }
         });
 
-
+        // Добавить запись
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,12 +54,15 @@ public class BirthdayActivity extends AppCompatActivity {
                 String name = nameEdit.getText().toString();
                 String date = dateEdit.getText().toString();
 
+                String[] dats = date.split("-");
+
                 SQLiteDatabase database = dbHelper.getWritableDatabase();
 
                 ContentValues contentValues = new ContentValues();
 
                 contentValues.put(dbHelper.KEY_NAME, name);
-                contentValues.put(dbHelper.KEY_DATE, date);
+                contentValues.put(dbHelper.KEY_DAY, dats[0]);
+                contentValues.put(dbHelper.KEY_MONTH, dats[1]);
 
                 database.insert(dbHelper.TABLE_BIRTHDAYS,null, contentValues);
                 Toast.makeText(getApplicationContext(), "Добавлена новая запись", Toast.LENGTH_LONG).show();

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.Button;
 import android.widget.EditText;
+import android.content.Intent;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -21,7 +22,8 @@ public class DatePicker extends DialogFragment
         // определяем текущую дату
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
+        //int month = c.get(Calendar.MONTH);
+        int month = getActivity().getIntent().getExtras().getInt("monthNumber");
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // создаем DatePickerDialog и возвращаем его
@@ -45,6 +47,6 @@ public class DatePicker extends DialogFragment
     @Override
     public void onDateSet(android.widget.DatePicker datePicker, int year, int month, int day) {
         EditText dateEdit = (EditText) getActivity().findViewById(R.id.editBdDate);
-        dateEdit.setText(day + "-" + month + "-" + year);
+        dateEdit.setText(day + "-" + (month+1));
     }
 }

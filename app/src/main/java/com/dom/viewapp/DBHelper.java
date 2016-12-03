@@ -9,13 +9,14 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper
 {
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "birthdayDb";
+    public static final int DATABASE_VERSION = 5;
+    public static final String DATABASE_NAME = "birthdayDb2";
     public static final String TABLE_BIRTHDAYS = "birthdays";
 
     public static final String KEY_ID = "_id";
     public static final String KEY_NAME = "name";
-    public static final String KEY_DATE = "date";
+    public static final String KEY_DAY = "day";
+    public static final String KEY_MONTH = "month";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -24,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + TABLE_BIRTHDAYS + "(" + KEY_ID
-                + " integer primary key," + KEY_NAME + " text," + KEY_DATE + " text" + ")");
+                + " integer primary key autoincrement not null," + KEY_NAME + " text," + KEY_DAY + " integer," + KEY_MONTH + " integer" + ")");
 
     }
 

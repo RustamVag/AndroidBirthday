@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Дни рождения</string>
     <string name="add">Добавить</string>
+    <string name="settings">Настройки</string>
     <string name="title_activity_birthday">BirthdayActivity</string>
+    <string name="title_activity_settings">Настройки</string>
 </resources>

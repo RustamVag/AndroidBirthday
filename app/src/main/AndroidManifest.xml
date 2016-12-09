@@ -19,6 +19,16 @@
         <activity
             android:name=".BirthdayActivity"
             android:label="@string/title_activity_birthday"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".BirthdayService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

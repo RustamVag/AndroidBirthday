@@ -7,12 +7,24 @@ import java.util.Date;
  */
 public class Birthday {
 
+   private Integer id;
+
     private String name;
 
     private Integer day;
 
     private Integer month;
 
+
+    public Integer getId()
+    {
+        return this.id;
+    }
+
+    public void setId(Integer id)
+    {
+        this.id = id;
+    }
 
     public String getName()
     {
@@ -29,7 +41,7 @@ public class Birthday {
         return this.day;
     }
 
-    public void setDate(Integer day)
+    public void setDay(Integer day)
     {
         this.day = day;
     }
@@ -50,6 +62,7 @@ public class Birthday {
         this.name = name;
         this.day = day;
         this.month = month;
+        this.id = 0;
     }
 
     public Birthday()
@@ -57,6 +70,16 @@ public class Birthday {
         this.name = "";
         this.day = 1;
         this.month = 0;
+        this.id = 0;
+    }
+
+    // Конструкторы
+    public Birthday(Integer id, String name, Integer day, Integer month)
+    {
+        this.name = name;
+        this.day = day;
+        this.month = month;
+        this.id = id;
     }
 
 }

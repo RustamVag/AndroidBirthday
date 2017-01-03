@@ -56,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (mSettings.contains(APP_PREFERENCES_NOTIFY)) {
             // Получаем число из настроек
             Boolean bNotify = mSettings.getBoolean(APP_PREFERENCES_NOTIFY, false);
-            Boolean bSound = mSettings.getBoolean(APP_PREFERENCES_NOTIFY, false);
+            Boolean bSound = mSettings.getBoolean(APP_PREFERENCES_SOUND, false);
             notifySwitch.setChecked(bNotify);
             soundSwitch.setChecked(bSound);
             powerService(bNotify);

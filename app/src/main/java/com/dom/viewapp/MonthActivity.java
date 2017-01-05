@@ -77,12 +77,15 @@ public class MonthActivity extends AppCompatActivity {
             int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
             int dayIndex = cursor.getColumnIndex(DBHelper.KEY_DAY);
             int monthIndex = cursor.getColumnIndex(DBHelper.KEY_MONTH);
+            int latIndex = cursor.getColumnIndex(DBHelper.KEY_LAT);
+            int longIndex = cursor.getColumnIndex(DBHelper.KEY_LONG);
+
             do {
                 Log.d("mLog", "ID = " + cursor.getInt(idIndex) +
                         ", name = " + cursor.getString(nameIndex) +
                         ", day = " + cursor.getInt(dayIndex) +
                         ", month = " + cursor.getInt(monthIndex));
-                birth.add( new Birthday(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(dayIndex), cursor.getInt(monthIndex)) );
+                birth.add( new Birthday(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(dayIndex), cursor.getInt(monthIndex), cursor.getDouble(latIndex), cursor.getDouble(longIndex)) );
                 //flag++;
             } while (cursor.moveToNext());
         } else {
@@ -108,6 +111,8 @@ public class MonthActivity extends AppCompatActivity {
                     bi.name = b.getName();
                     bi.state = 1;
                     bi.id = b.getId();
+                    bi.latitude = b.getLatitude();
+                    bi.longitude = b.getLongitude();
                     birthdays.add(bi);
                     flag++;
                 }
@@ -191,6 +196,8 @@ public class MonthActivity extends AppCompatActivity {
                             intent.putExtra("monthNumber", pos+1);
                             intent.putExtra("dayNumber", bi.day);
                             intent.putExtra("birthdayName", bi.name);
+                            intent.putExtra("latitude", bi.latitude);
+                            intent.putExtra("longitude", bi.longitude);
                             intent.putExtra("command", COMMAND_EDIT);
                             startActivity(intent);
                             return true;
@@ -260,6 +267,10 @@ public class MonthActivity extends AppCompatActivity {
 
         public int id;
 
+        public double latitude;
+
+        public double longitude;
+
         public BirthdayItem(String name, String date, int day, int month)
         {
             this.name = name;
@@ -268,6 +279,9 @@ public class MonthActivity extends AppCompatActivity {
             this.id = 0;
             this.day = day;
             this.month = month;
+            this.latitude = BirthdayActivity.LOCATION_NULL;
+            this.longitude = BirthdayActivity.LOCATION_NULL;
+
         }
     }
 

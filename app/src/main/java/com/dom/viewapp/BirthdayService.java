@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
@@ -170,7 +171,21 @@ public class BirthdayService extends Service {
         @Override
         public void handleMessage(Message msg) {
             Toast.makeText(getApplicationContext(), "Дни рождения: новое уведомление", Toast.LENGTH_SHORT).show();
-            mediaPlayer.start();
+            // Механизм хранения настроек
+            String APP_PREFERENCES = "mysettings";
+            String APP_PREFERENCES_NOTIFY = "notify";
+            String APP_PREFERENCES_SOUND = "sound";
+            SharedPreferences mSettings;
+            mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+
+            if (mSettings.contains(APP_PREFERENCES_NOTIFY)) {
+                // Получаем число из настроек
+                Boolean bSound = mSettings.getBoolean(APP_PREFERENCES_SOUND, false);
+
+                if (bSound) {
+                    mediaPlayer.start();
+                }
+            }
         }
     };
 

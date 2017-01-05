@@ -15,6 +15,10 @@ public class Birthday {
 
     private Integer month;
 
+    private Double latitude;
+
+    private Double longitude;
+
 
     public Integer getId()
     {
@@ -56,6 +60,15 @@ public class Birthday {
         this.month = month;
     }
 
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
+
+    public Double getLatitude() { return this.latitude; }
+
+    public void setLongitude(Double longitude) {this.longitude = longitude; }
+
+    public Double getLongitude() {return this.longitude; }
+
+
     // Конструкторы
     public Birthday(String name, Integer day, Integer month)
     {
@@ -73,7 +86,6 @@ public class Birthday {
         this.id = 0;
     }
 
-    // Конструкторы
     public Birthday(Integer id, String name, Integer day, Integer month)
     {
         this.name = name;
@@ -81,5 +93,16 @@ public class Birthday {
         this.month = month;
         this.id = id;
     }
+
+    public Birthday(Integer id, String name, Integer day, Integer month, Double latitude, Double longitude)
+    {
+        this.name = name;
+        this.day = day;
+        this.month = month;
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
 
 }

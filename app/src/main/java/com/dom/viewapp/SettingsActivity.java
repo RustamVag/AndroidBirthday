@@ -42,6 +42,10 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                SharedPreferences.Editor editor = mSettings.edit();
+                editor.putBoolean(APP_PREFERENCES_NOTIFY, notifySwitch.isChecked());
+                editor.putBoolean(APP_PREFERENCES_SOUND, soundSwitch.isChecked());
+                editor.apply();
                 powerService(notifySwitch.isChecked());
             }
 

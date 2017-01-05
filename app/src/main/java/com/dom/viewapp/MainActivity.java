@@ -68,6 +68,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        if (id == R.id.action_about)
+        {
+            Intent intent = new Intent(this,AboutActivity.class);
+            startActivity(intent);
+        }
+
         return true;
     }
 

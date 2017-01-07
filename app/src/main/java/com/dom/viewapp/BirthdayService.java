@@ -83,7 +83,7 @@ public class BirthdayService extends Service {
         mTimer.schedule(tt, 10000, 1000*60*30);
 
         // Подготовка плеера
-        mediaPlayer = MediaPlayer.create(this, R.raw.notify2);
+        mediaPlayer = MediaPlayer.create(this, R.raw.notification);
         mediaPlayer.setLooping(false);
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override

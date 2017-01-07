@@ -32,6 +32,7 @@ public class MonthActivity extends AppCompatActivity {
     // Константы
     public static final int COMMAND_NEW = 1;
     public static final int COMMAND_EDIT = 2;
+    public  static final int ACTIVITY_BIRTHDAY = 5;
 
     private static final List<BirthdayItem> birthdays = new ArrayList<BirthdayItem>();
     private static final List<Birthday> birth = new ArrayList<Birthday>();
@@ -46,6 +47,89 @@ public class MonthActivity extends AppCompatActivity {
     AlertDialog.Builder deleteDialog;
     Context context;
 
+    // --  Получили ответ от вызванных активити --
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Обновляем список
+        if (requestCode == ACTIVITY_BIRTHDAY)
+        {
+            // Определяем месяц
+            pos = getIntent().getExtras().getInt("monthNumber");
+
+            Month month = new Month(pos+1);
+            //String[] list = new String[month.getCount()];
+
+            TextView tv = (TextView) findViewById(R.id.textView2);
+            tv.setText(month.getName());
+
+            Integer d,m,y;
+            m = month.getNumber();
+            // Чтение из БД
+            dbHelper = new DBHelper(this);
+            database = dbHelper.getWritableDatabase();
+            Cursor cursor = database.query(DBHelper.TABLE_BIRTHDAYS, null, null, null, null, null, null);
+
+            birth.clear();
+            if (cursor.moveToFirst()) {
+                // int flag = 0;
+                int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
+                int nameIndex = cursor.getColumnIndex(DBHelper.KEY_NAME);
+                int dayIndex = cursor.getColumnIndex(DBHelper.KEY_DAY);
+                int monthIndex = cursor.getColumnIndex(DBHelper.KEY_MONTH);
+                int latIndex = cursor.getColumnIndex(DBHelper.KEY_LAT);
+                int longIndex = cursor.getColumnIndex(DBHelper.KEY_LONG);
+
+                do {
+                    Log.d("mLog", "ID = " + cursor.getInt(idIndex) +
+                            ", name = " + cursor.getString(nameIndex) +
+                            ", day = " + cursor.getInt(dayIndex) +
+                            ", month = " + cursor.getInt(monthIndex));
+                    birth.add( new Birthday(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getInt(dayIndex), cursor.getInt(monthIndex), cursor.getDouble(latIndex), cursor.getDouble(longIndex)) );
+                    //flag++;
+                } while (cursor.moveToNext());
+            } else {
+                Log.d("mLog", "0 rows");
+                tv.setText("Список дней рождения пуст");
+
+            }
+
+            cursor.close();
+
+            birthdays.clear();
+            // Составление списка
+            int flag = 0;
+            for (Integer i = 1; i <= month.getCount(); i++)
+            {
+                //list[i-1] = i.toString() + "." + m.toString() + ".2016";
+
+                BirthdayItem bi = new BirthdayItem(" ",i.toString() + "." + m.toString() + ".2016", i, m);
+                for(Birthday b: birth)
+                {
+                    if ((b.getDay() == i) && (b.getMonth() == m))
+                    {
+                        bi.name = b.getName();
+                        bi.state = 1;
+                        bi.id = b.getId();
+                        bi.latitude = b.getLatitude();
+                        bi.longitude = b.getLongitude();
+                        birthdays.add(bi);
+                        flag++;
+                    }
+                }
+            }
+            if (flag < 1) tv.setText("Список дней рождения пуст");
+
+            lv= (ListView) findViewById(R.id.listView2);
+
+            //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+            adapter = new BirthdayAdapter(this);
+            lv.setAdapter(adapter);
+        }
+    }
+
+    // ---- Инициализация активити -----
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,13 +277,13 @@ public class MonthActivity extends AppCompatActivity {
                             Log.d("Отладка 1:","date = " + bi.date.toString() + ", name = " + bi.name);
                             Intent intent = new Intent(getApplicationContext(), BirthdayActivity.class);
                             intent.putExtra("birthdayId", bi.id);
-                            intent.putExtra("monthNumber", pos+1);
+                            intent.putExtra("monthNumber", pos);
                             intent.putExtra("dayNumber", bi.day);
                             intent.putExtra("birthdayName", bi.name);
                             intent.putExtra("latitude", bi.latitude);
                             intent.putExtra("longitude", bi.longitude);
                             intent.putExtra("command", COMMAND_EDIT);
-                            startActivity(intent);
+                            startActivityForResult(intent, ACTIVITY_BIRTHDAY);
                             return true;
                         case R.id.action_delete:
                             //Toast.makeText(getApplicationContext(),
@@ -240,7 +324,7 @@ public class MonthActivity extends AppCompatActivity {
         {
             Intent intent = new Intent(this, BirthdayActivity.class);
             intent.putExtra("monthNumber", pos);
-            startActivity(intent);
+            startActivityForResult(intent, ACTIVITY_BIRTHDAY);
         }
 
         if (id == R.id.action_settings)

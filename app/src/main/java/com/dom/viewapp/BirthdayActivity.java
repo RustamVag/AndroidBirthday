@@ -51,9 +51,6 @@ public class BirthdayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.birthday);
 
-        // Инициализируем геолокацию
-        //MyLocationListener.SetUpLocationListener(this);
-
         // Читаем данные из MonthActivity
         birthdayId = getIntent().getExtras().getInt("birthdayId");
         monthNumber = getIntent().getExtras().getInt("monthNumber");
@@ -74,12 +71,20 @@ public class BirthdayActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-
+        // ----- Обработка GPS -------
         listener = new LocationListener() {
+
+            // Координаты определны/изменены
             @Override
             public void onLocationChanged(Location location) {
-                textLat.append("\n " + location.getLatitude());
-                textLong.append("\n "  + location.getLongitude());
+                latitude = location.getLatitude();
+                longitude =  location.getLongitude();
+
+                latitude = (double) Math.round(latitude*10000)/10000;
+                longitude = (double) Math.round(longitude*10000)/10000;
+
+                locationButton.setClickable(true);
+                locationButton.setEnabled(true);
             }
 
             @Override
@@ -103,7 +108,8 @@ public class BirthdayActivity extends AppCompatActivity {
         configure_button();
 
         Log.d("Отладка 2:","date = " + dayNumber + "-" + monthNumber + ", name = " + birthdayName);
-        // Обработка поступивших команд команд
+
+        // ----- Обработка поступивших команд команд ------
         if (command == COMMAND_EDIT)
         {
             String dateText = dayNumber + "-" + monthNumber;
@@ -117,13 +123,12 @@ public class BirthdayActivity extends AppCompatActivity {
         else
         {
             textLat.setText("Не определено");
-            textLat.setText("Не определено");
+            textLong.setText("Не определено");
             latitude = Double.parseDouble(LOCATION_NULL.toString());
             longitude = Double.parseDouble(LOCATION_NULL.toString());
         }
 
         dbHelper = new DBHelper(this);
-
 
         // Выбор даты
         dateEdit.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +141,8 @@ public class BirthdayActivity extends AppCompatActivity {
             }
         });
 
-        // Добавить запись
+
+        // ------ Добавить запись -------
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,8 +150,8 @@ public class BirthdayActivity extends AppCompatActivity {
                 String name = nameEdit.getText().toString();
                 String date = dateEdit.getText().toString();
 
-                latitude = Double.parseDouble(textLat.getText().toString());
-                longitude = Double.parseDouble(textLong.getText().toString());
+                //latitude = Double.parseDouble(textLat.getText().toString());
+                //longitude = Double.parseDouble(textLong.getText().toString());
 
                 String[] dats = date.split("-");
 
@@ -176,9 +182,9 @@ public class BirthdayActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Добавлена новая запись", Toast.LENGTH_LONG).show();
                 }
 
-                Intent intent = new Intent(getApplicationContext(), MonthActivity.class);
-                intent.putExtra("monthNumber", monthNumber);
-                startActivity(intent);
+                //Intent intent = new Intent(getApplicationContext(), MonthActivity.class);
+                //intent.putExtra("monthNumber", monthNumber);
+                // startActivity(intent);
             }
 
         });
@@ -198,6 +204,18 @@ public class BirthdayActivity extends AppCompatActivity {
         */
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationManager.removeUpdates(listener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        locationManager.requestLocationUpdates("gps", 5000, 0, listener);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -210,6 +228,7 @@ public class BirthdayActivity extends AppCompatActivity {
         }
     }
 
+    // Получение координат кнопка
     void configure_button(){
         // first check for permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -223,13 +242,21 @@ public class BirthdayActivity extends AppCompatActivity {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //noinspection MissingPermission
-                locationManager.requestLocationUpdates("gps", 5000, 0, listener);
+
+                if (latitude < LOCATION_NULL)textLat.setText(latitude.toString());
+                if (longitude < LOCATION_NULL)textLong.setText(longitude.toString());
             }
         });
     }
 
-    // Геолокация
+    // Округление с заданной точностью
+    double roundResult (double d, int precise)
+    {
+        precise = 10^precise;
+        d = d * precise;
+        int i = (int) Math.round(d);
+        return (double) i / precise;
+    }
 
 
 

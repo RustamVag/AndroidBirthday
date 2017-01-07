@@ -91,6 +91,8 @@
         android:id="@+id/location_button"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:clickable="false"
+        android:enabled="false" />
 
 </RelativeLayout>

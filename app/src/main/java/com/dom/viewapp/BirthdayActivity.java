@@ -112,7 +112,7 @@ public class BirthdayActivity extends AppCompatActivity {
         // ----- Обработка поступивших команд команд ------
         if (command == COMMAND_EDIT)
         {
-            String dateText = dayNumber + "-" + monthNumber;
+            String dateText = dayNumber + "-" + (monthNumber + 1);
             dateEdit.setText(dateText);
             nameEdit.setText(birthdayName);
             addButton.setText("СОХРАНИТЬ");
@@ -173,7 +173,7 @@ public class BirthdayActivity extends AppCompatActivity {
                     String whereText = DBHelper.KEY_ID + "=" + birthdayId;
                     database.update(dbHelper.TABLE_BIRTHDAYS, contentValues, whereText, null);
                     Toast.makeText(getApplicationContext(), "Запись изменена", Toast.LENGTH_LONG).show();
-                    monthNumber--;
+                    //monthNumber--;
 
                 }
                 else
